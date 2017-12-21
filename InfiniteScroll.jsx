@@ -34,17 +34,23 @@ class InfiniteScroll extends React.Component {
         if (unseenAreaHeight < this.props.threshold) {
             this.isFetching = true;
             this.props.fetch()
-                .then(() => this.completeFetch())
+                .then(() => {
+                    this.completeFetch();
+                    this.handleScrolling();
+                })
                 .catch(error => {
                     this.completeFetch();
-                    throw error;
+                    if (this.props.onError) {
+                        this.props.onError(error);
+                    } else {
+                        throw error;
+                    }
                 });
         }
     }
 
     completeFetch() {
         this.isFetching = false;
-        this.handleScrolling();
     }
 
     attachScrollHandler() {
@@ -71,6 +77,7 @@ InfiniteScroll.propTypes = {
     hasMoreData: PropTypes.bool.isRequired,
     threshold: PropTypes.number.isRequired,
     className: PropTypes.string,
+    onError: PropTypes.func
 };
 
 InfiniteScroll.defaultProps = {
