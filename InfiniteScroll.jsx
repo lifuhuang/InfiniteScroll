@@ -36,7 +36,7 @@ class InfiniteScroll extends React.Component {
             this.props.fetch()
                 .then(() => {
                     this.completeFetch();
-                    this.handleScrolling();
+                    window.setTimeout(this.handleScrolling);
                 })
                 .catch(error => {
                     this.completeFetch();
